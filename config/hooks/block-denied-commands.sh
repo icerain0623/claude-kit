@@ -10,11 +10,18 @@ block() {
   exit 2
 }
 
-# Extract the first word (command name) and check against denied list
-# Also check for these commands appearing after && or ; or |
-for denied in su sudo passwd history env printenv rsync scp sftp socat ssh nc ncat netcat nmap shutdown reboot halt poweroff crontab launchctl op vault security; do
-  # Match as first command or after shell operators (&& ; | `)
+# Match as first command or after shell operators (&& ; | `).
+# NOTE: name-based matching is best-effort defense-in-depth — it is bypassable via
+# an absolute path (e.g. /usr/bin/ssh). The sandbox is the real boundary.
+for denied in su sudo passwd history rsync scp sftp socat ssh nc ncat netcat nmap shutdown reboot halt poweroff crontab launchctl op vault security; do
   if echo "$cmd" | grep -qE "(^|&&|;|\||\`)[[:space:]]*${denied}([[:space:]]|$)"; then
     block "Blocked by security hook: '$denied' is not allowed"
   fi
 done
+
+# env / printenv: block a bare environment dump, but allow the common
+# `env VAR=val cmd` idiom — a `VAR=` assignment means a command is being run with
+# a tweaked environment, not the whole environment being dumped.
+if echo "$cmd" | grep -qE "(^|&&|;|\||\`)[[:space:]]*(env|printenv)([[:space:]]+-[^=[:space:]]*)*[[:space:]]*\$"; then
+  block "Blocked by security hook: bare 'env'/'printenv' environment dump is not allowed"
+fi

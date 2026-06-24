@@ -1,0 +1,12 @@
+# Secrets — NEVER commit. The real PAT lives only on each machine.
+config/settings.local.json
+settings.local.json
+
+# A populated settings file (safety net against committing real tokens)
+config/settings.json
+settings.json
+
+.scratch/
+.DS_Store
+.idea/
+*.bak.*

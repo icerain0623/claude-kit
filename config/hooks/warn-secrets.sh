@@ -18,17 +18,23 @@ if [ -z "$content" ]; then
   exit 0
 fi
 
+# Both quote characters (double + single) for use inside DOUBLE-quoted regexes.
+# A single-quoted grep argument cannot portably hold a literal apostrophe, and
+# BSD grep treats \x27 inside a bracket expression as the literal chars \,x,2,7
+# (so single-quoted secrets would slip through). Expanding [$q] sidesteps both.
+q="\"'"
+
 # ============================================================
 # 1. API keys / secret keys / tokens (key=value pattern)
 # ============================================================
-if echo "$content" | grep -qiE '(api[_-]?key|secret[_-]?key|api[_-]?secret|access[_-]?key)\s*[:=]\s*["\x27]?[A-Za-z0-9+/=_-]{20,}'; then
+if echo "$content" | grep -qiE "(api[_-]?key|secret[_-]?key|api[_-]?secret|access[_-]?key)\s*[:=]\s*[$q]?[A-Za-z0-9+/=_-]{20,}"; then
   warn "機密情報の可能性: APIキーまたはシークレットキーのハードコードを検出しました"
 fi
 
 # ============================================================
 # 2. Password / credential hardcoding
 # ============================================================
-if echo "$content" | grep -qiE '(password|passwd|pwd)\s*[:=]\s*["\x27][^"\x27]{8,}["\x27]'; then
+if echo "$content" | grep -qiE "(password|passwd|pwd)\s*[:=]\s*[$q][^$q]{8,}[$q]"; then
   warn "機密情報の可能性: パスワードのハードコードを検出しました"
 fi
 
@@ -61,7 +67,7 @@ if echo "$content" | grep -qE 'xox[baprs]-[A-Za-z0-9-]{10,}'; then
 fi
 
 # Generic bearer/auth tokens in code
-if echo "$content" | grep -qiE '(bearer|authorization)\s*[:=]\s*["\x27][A-Za-z0-9+/=._-]{30,}["\x27]'; then
+if echo "$content" | grep -qiE "(bearer|authorization)\s*[:=]\s*[$q][A-Za-z0-9+/=._-]{30,}[$q]"; then
   warn "機密情報の可能性: 認証トークンのハードコードを検出しました"
 fi
 

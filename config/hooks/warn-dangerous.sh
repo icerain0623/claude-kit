@@ -1,6 +1,13 @@
 #!/bin/bash
-# Dangerous command warning hook
-# Returns permissionDecision: "ask" to prompt user confirmation
+# Dangerous command warning hook.
+# Returns permissionDecision: "ask" to prompt user confirmation.
+#
+# Scope: this hook only guards multi-token destructive patterns that the
+# permission system cannot express well (rm -rf <path>, git history/worktree
+# loss, dd/mkfs, chmod, destructive SQL via a db client).
+# Single-command concerns (kill/aws/gcloud/az/diskutil/defaults/gpg export) are
+# left to settings.json "ask", which matches at COMMAND POSITION and therefore
+# does not false-positive on benign substrings (e.g. `cat aws-notes.txt`).
 
 cmd=$(jq -r '.tool_input.command')
 
@@ -16,14 +23,15 @@ HOOK_JSON
 # A. File system destruction
 # ============================================================
 
-# rm -rf on root, home, or parent traversal paths
-if echo "$cmd" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*\s+.*|.*\s+)(\/\s*$|\/\*|\/[a-z]*\s|~\/|~\s*$|\$HOME)'; then
-  warn "危険なrm操作を検出: ルート/ホームディレクトリに対する再帰的削除の可能性があります"
-fi
-
-# rm -rf with parent directory traversal
-if echo "$cmd" | grep -qE 'rm\s+.*-[a-zA-Z]*r[a-zA-Z]*.*\.\./\.\.'; then
-  warn "危険なrm操作を検出: 親ディレクトリへの遡り削除はリスクがあります"
+# rm carrying BOTH a recursive flag and a force flag, aimed at an absolute path,
+# home, or a top-level glob. `rm` is anchored to command position so `git rm`
+# and words like "charm"/"form" do not trigger. Relative paths (node_modules,
+# ./dist, src/foo) are intentionally NOT flagged — only /, ~, $HOME, * targets.
+if echo "$cmd" | grep -qE '(^|[|&;])[[:space:]]*rm[[:space:]]' \
+   && echo "$cmd" | grep -qE '(-[a-zA-Z]*r|--recursive)' \
+   && echo "$cmd" | grep -qE '(-[a-zA-Z]*f|--force)' \
+   && echo "$cmd" | grep -qE '([[:space:]]|=)(/|~|\$HOME|\*)'; then
+  warn "危険なrm操作を検出: 再帰的・強制削除が絶対パス/ホーム/グロブを対象にしています"
 fi
 
 # ============================================================
@@ -94,67 +102,24 @@ if echo "$cmd" | grep -qE '(chmod|chown)\s+-R\s+.*\s+\/\s*$'; then
 fi
 
 # ============================================================
-# E. Database destructive operations
+# E. Database destructive statements — only when a SQL client is invoked
 # ============================================================
-
-# DROP DATABASE / TABLE / SCHEMA
-if echo "$cmd" | grep -qiE 'DROP\s+(DATABASE|TABLE|SCHEMA)\b'; then
-  warn "DROP操作を検出: データベース/テーブル/スキーマが削除されます"
+# Gating on the client name avoids false positives on benign text that merely
+# mentions a keyword (e.g. `grep -r 'DROP TABLE' migrations/`, `cat drop.sql`).
+if echo "$cmd" | grep -qiE '(^|[|&;]|[[:space:]])(psql|mysql|mariadb|sqlite3)\b'; then
+  # DROP DATABASE / TABLE / SCHEMA
+  if echo "$cmd" | grep -qiE 'DROP[[:space:]]+(DATABASE|TABLE|SCHEMA)\b'; then
+    warn "DROP操作を検出: データベース/テーブル/スキーマが削除されます"
+  fi
+  # TRUNCATE TABLE
+  if echo "$cmd" | grep -qiE 'TRUNCATE[[:space:]]+(TABLE[[:space:]]+)?[A-Za-z_]'; then
+    warn "TRUNCATE操作を検出: テーブルの全データが削除されます"
+  fi
+  # DELETE without WHERE (two sequential greps — a single `grep -q | grep` pipe
+  # is a no-op because grep -q writes nothing to the next stage).
+  if echo "$cmd" | grep -qiE 'DELETE[[:space:]]+FROM' && ! echo "$cmd" | grep -qiE 'WHERE'; then
+    warn "WHERE句のないDELETE操作を検出: テーブルの全レコードが削除される可能性があります"
+  fi
 fi
 
-# TRUNCATE TABLE
-if echo "$cmd" | grep -qiE 'TRUNCATE\s+(TABLE\s+)?\b'; then
-  warn "TRUNCATE操作を検出: テーブルの全データが削除されます"
-fi
-
-# DELETE without WHERE
-if echo "$cmd" | grep -qiE 'DELETE\s+FROM\s+\S+\s*$' | grep -qivE 'WHERE'; then
-  warn "WHERE句のないDELETE操作を検出: テーブルの全レコードが削除される可能性があります"
-fi
-
-# ============================================================
-# F. Process termination
-# ============================================================
-
-# kill / killall / pkill
-if echo "$cmd" | grep -qE '\b(kill|killall|pkill)\b'; then
-  warn "プロセス停止コマンドを検出: 意図しないプロセスが終了する可能性があります"
-fi
-
-# ============================================================
-# G. Disk operations (macOS)
-# ============================================================
-
-# diskutil
-if echo "$cmd" | grep -qE '\bdiskutil\b'; then
-  warn "diskutil を検出: ディスク操作が実行されます"
-fi
-
-# ============================================================
-# H. Cloud credentials / secrets access
-# ============================================================
-
-# AWS CLI
-if echo "$cmd" | grep -qE '\baws\b'; then
-  warn "AWS CLI を検出: クラウドリソースへのアクセスが実行されます"
-fi
-
-# GCP CLI
-if echo "$cmd" | grep -qE '\bgcloud\b'; then
-  warn "gcloud を検出: GCPリソースへのアクセスが実行されます"
-fi
-
-# Azure CLI
-if echo "$cmd" | grep -qE '\baz\b'; then
-  warn "Azure CLI を検出: Azureリソースへのアクセスが実行されます"
-fi
-
-# macOS defaults
-if echo "$cmd" | grep -qE '\bdefaults\b'; then
-  warn "defaults を検出: macOSシステム設定の読み書きが実行されます"
-fi
-
-# GPG secret key export
-if echo "$cmd" | grep -qE 'gpg\s+--export-secret-keys'; then
-  warn "GPG秘密鍵のエクスポートを検出"
-fi
+exit 0

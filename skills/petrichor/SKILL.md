@@ -1,6 +1,6 @@
 ---
 name: petrichor
-description: Use when planning a new project or a feature and you want to be interviewed relentlessly until the plan is fully specified. The front-door for greenfield work — plan here first, then scaffold and run squall. Starts as one-question-at-a-time chat to grasp the overview, then switches to document-based batched Q&A for details. Resumable — re-invoke to continue.
+description: Front-door for greenfield planning — interviews the user relentlessly until a new project or feature is fully specified, then hands the spec off to scaffolding and squall. Phase 0 is one-question-at-a-time chat for the overview; Phase 1+ switches to batched, document-based Q&A for independent details. Resumable — re-invoke to continue from docs/petrichor-plan/00-overview.md. Invoke by name as /petrichor, or it triggers when the user wants to plan, spec out, or think through a new feature or project before building — especially when they want to be questioned thoroughly rather than handed a quick plan. Prefer this over an ad-hoc plan when the work is non-trivial and underspecified. Software/feature planning only — not for scheduling, task lists, or general life planning.
 ---
 
 # Petrichor
@@ -60,6 +60,6 @@ If `docs/petrichor-plan/00-overview.md` exists, read it. Its header gives the ph
 
 ## Done
 
-When no open questions remain anywhere: set header `Next: DONE`, and tell the user `00-overview.md` is the spec to hand to implementation.
+When no open questions remain anywhere: set header `Next: DONE`, and tell the user `00-overview.md` is the spec to hand to implementation. Implementation/scaffolding from that spec is performed by the agent's normal coding loop — there is no dedicated implementation skill — and once code exists, run `squall` to initialize the repo config and hand off to `monsoon`.
 
 Never make the user re-summarize their answers — re-read and diff the file yourself.

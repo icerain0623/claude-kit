@@ -21,7 +21,7 @@ Tidy up fully merged branches. Safe by construction: only merged branches are re
    for each merged branch whose upstream is gone, `git push origin --delete <branch>`.
 
 ## Rules
-- Never delete `main`/`master` or the current branch.
+- Never delete `main`/`master` or the current branch. (A git-workflow hook also hard-blocks deleting main/master locally and remotely, as a backstop.)
 - Use `-d` (safe). Only use `-D` if the user explicitly names a specific unmerged branch and insists.
 - Remote deletion is opt-in and confirmed on its own.
 - "Merged" is computed relative to main — if the working copy is far behind, run the fetch in step 2 first and say so.

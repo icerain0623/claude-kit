@@ -20,6 +20,8 @@ claude-kit/
 │   ├── forge/                 # authored skills           → ~/.claude/skills/<name>/
 │   ├── python-setup/          # sandbox-safe Python venv onboarding
 │   ├── clean-branches/        # delete merged local/remote branches
+│   ├── check/                 # run lint/typecheck (+test/build), log + summarize
+│   ├── release-note/          # opt-in RELEASE_NOTE.md changelog
 │   ├── session-info/          # write session resume info to claude-shared
 │   └── session-learn/         # mine past transcripts into memory lessons
 └── .claude/CLAUDE.md          # project-scoped rules for working on claude-kit itself

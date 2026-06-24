@@ -1,11 +1,19 @@
 ---
 name: python-setup
-description: Use before running Python in a project — when `python` is missing (macOS ships only `python3`), when pip installs fail under the sandbox (system site-packages and `~/Library/Caches/pip` aren't writable), or when a project needs an isolated, version-pinned interpreter. Sets up a project-local venv (optionally via pyenv) so `python`/`pip` work cleanly inside the Claude Code sandbox.
+description: Set up a sandbox-safe Python environment for a project — reuse an existing interpreter/venv if present, else create a project-local venv. Use when `python` is missing, pip installs fail under the sandbox, or a project needs an isolated interpreter.
 ---
 
 # Python Setup
 
-macOS no longer ships `python` (only `python3`), and the system/framework interpreter's `site-packages` plus the default pip cache (`~/Library/Caches/pip`) sit outside the sandbox's writable paths — so `pip install` fails there. The fix is always the same: a **project-local virtual environment**, with its cache redirected to a writable path.
+macOS no longer ships `python` (only `python3`), and the system/framework interpreter's `site-packages` plus the default pip cache (`~/Library/Caches/pip`) sit outside the sandbox's writable paths — so `pip install` fails there. The fix is a project-local virtual environment with its cache on a writable path.
+
+## Reuse before creating
+First check whether the project already has an interpreter, and use it rather than reinstalling:
+- An existing `.venv/` or `venv/` in the repo → use `.venv/bin/python`.
+- An IDE-configured interpreter (JetBrains/WebStorm/PyCharm: look in `.idea/`, or a `.venv` the IDE made) → use that path.
+- A `.python-version` (pyenv) or `.tool-versions`/`.mise.toml` pin → honor it.
+
+Only run the setup below when none of these exist.
 
 ## Default path — project venv
 

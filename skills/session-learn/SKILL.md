@@ -1,6 +1,6 @@
 ---
 name: session-learn
-description: Mine recent Claude Code session transcripts for friction — where work got stuck, user corrections, repeated tool/permission failures — and record durable lessons to memory so they aren't repeated. Use when asked to review or learn from past sessions, or periodically to consolidate lessons.
+description: Mine recent Claude Code session transcripts for patterns — instructions the user repeated across sessions (candidates for a standing rule), errors hit more than once plus the fix that worked, and general friction — then propose rules and record error→fix lessons to memory so they aren't repeated. Use when asked to review or learn from past sessions, or periodically to consolidate lessons.
 ---
 
 # Session Learn
@@ -8,20 +8,24 @@ description: Mine recent Claude Code session transcripts for friction — where 
 Turn recurring friction in recent transcripts into a few durable memory entries.
 
 ## Where transcripts live
-`~/.claude/projects/<slug>/*.jsonl`, one file per session, where `<slug>` is this project's absolute path with `/` replaced by `-`. Sort by mtime, newest first. Default to the most recent 3–5 sessions unless told otherwise.
+`~/.claude/projects/<slug>/*.jsonl`, one file per session, where `<slug>` is this project's absolute path with `/` replaced by `-`. Sort by mtime, newest first. Review as many as the context budget allows — ideally all of them; only cap to the most recent when the volume would overflow context. State how many you reviewed.
 
 ## Steps
 1. List recent transcripts (newest first) and choose the review window.
-2. Scan with `grep`/`jq` rather than reading whole files (they are large). Look for friction signals:
-   - User corrections: "no", "actually", "that's wrong", "don't", "instead", reverts of prior work.
-   - The same tool failing or being retried repeatedly on one target.
-   - Permission denials and sandbox failures that recurred across sessions.
-   - Tasks that took many attempts before landing.
+2. Scan with `grep`/`jq` rather than reading whole files (they are large). Look for three kinds of signal:
+   - **Repeated user asks / corrections** — the same instruction or correction given across multiple sessions ("again, use…", "I told you…", "no, do it this way", reverts of the same kind of work). These are the strongest candidates for a standing rule.
+   - **Recurring errors** — the same (or similar) error or failure hit more than once, plus the action that finally resolved it. Capture the error signature and the working fix together.
+   - **General friction** — tasks that took many attempts, recurring permission/sandbox denials.
 3. Cluster the signals into a few concrete, generalizable lessons. Discard one-offs.
-4. For each lesson worth keeping, write or update a `feedback` memory (follow the global memory instructions: frontmatter, Why, How-to-apply, MEMORY.md pointer). Update an existing memory rather than creating a near-duplicate. Skip anything already covered by CLAUDE.md or existing memory.
-5. Report the lessons saved and which transcripts were reviewed.
+4. Turn each kept lesson into the right artifact:
+   - A repeated ask/correction → propose a **standing rule**. If it's broadly applicable, suggest adding it to the global CLAUDE.md (show the exact line); otherwise write a `feedback` memory. Present rule suggestions to the user for approval before editing CLAUDE.md.
+   - A recurring error → write an `error→fix` entry: the error signature and the resolution that worked, as a `feedback` or `reference` memory, so the next occurrence is solved fast.
+   - Other friction → a `feedback` memory.
+   Follow the global memory instructions (frontmatter, Why, How-to-apply, MEMORY.md pointer). Update an existing entry rather than creating a near-duplicate. Skip anything already covered by CLAUDE.md or existing memory.
+5. Report: rules suggested (for approval), error→fix entries saved, other lessons saved, and how many transcripts were reviewed.
 
 ## Rules
 - Save general, reusable lessons — not session-specific trivia.
+- Don't edit the global CLAUDE.md unprompted; rule suggestions go to the user first.
 - Never copy secrets, tokens, or raw file contents from transcripts into memory.
-- Prefer merging into existing memories over proliferating new ones.
+- Prefer merging into existing entries over proliferating new ones.

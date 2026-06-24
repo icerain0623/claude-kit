@@ -1,0 +1,6 @@
+# Global gitignore — wired up via `git config --global core.excludesfile`.
+# Applies to every repo on this machine, so no per-repo .gitignore edit needed.
+.scratch/
+.DS_Store
+.idea/
+*.bak.*

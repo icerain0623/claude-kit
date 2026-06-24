@@ -1,0 +1,11 @@
+# Global npm config — wired to ~/.npmrc by install.sh.
+# Disable lifecycle scripts on install by default (supply-chain hardening).
+# A malicious package can't run postinstall code just by being installed.
+ignore-scripts=true
+
+# Don't install a release until it's had time to be vetted (supply-chain).
+min-release-age=7
+
+# When a trusted package genuinely needs its build step, run it explicitly:
+#   npm install <pkg> --ignore-scripts=false   (that one install)
+#   npm rebuild <pkg>                           (run its scripts after the fact)

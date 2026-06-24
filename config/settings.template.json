@@ -1,0 +1,345 @@
+{
+  "env": {
+    "EDITOR": "webstorm --wait",
+    "VISUAL": "webstorm --wait",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "GIT_TEMPLATE_DIR": "",
+    "SSL_CERT_FILE": "/etc/ssl/cert.pem",
+    "CARGO_HTTP_CAINFO": "/etc/ssl/cert.pem",
+    "_comment_GH_TOKEN": "DO NOT put your real PAT here. Put it in ~/.claude/settings.local.json (gitignored) instead.",
+    "GH_TOKEN": "<SET_IN_settings.local.json>"
+  },
+  "permissions": {
+    "allow": [
+      "Edit(~/Documents/GitHub/**)",
+      "Edit(~/Developers/**)",
+      "Edit(~/Documents/claude-shared/**)",
+      "Write(~/Documents/GitHub/**)",
+      "Write(~/Developers/**)",
+      "Write(~/Documents/claude-shared/**)",
+      "Read(~/Documents/GitHub/**)",
+      "Read(~/Developers/**)",
+      "Read(~/Documents/claude-shared/**)",
+      "Bash(npm run build)",
+      "Bash(npm run test *)",
+      "Bash(npm run test)",
+      "Bash(npm run lint *)",
+      "Bash(npm run lint)",
+      "Bash(npm run format *)",
+      "Bash(npm run format)",
+      "Bash(npm run start)",
+      "Bash(pnpm build)",
+      "Bash(pnpm start)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm test)",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm format *)",
+      "Bash(pnpm format)",
+      "Bash(pnpm dlx *)",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm why *)",
+      "Bash(pnpm list *)",
+      "Bash(docker *)",
+      "Bash(docker)",
+      "Bash(docker-compose *)",
+      "Bash(kubectl *)",
+      "Bash(kubectl)",
+      "Bash(colima *)",
+      "Bash(colima)",
+      "Bash(make *)",
+      "Bash(make)",
+      "Bash(cmake *)",
+      "Bash(gcc *)",
+      "Bash(g++ *)",
+      "Bash(clang *)",
+      "Bash(clang++ *)",
+      "Bash(go *)",
+      "Bash(cargo *)",
+      "Bash(java *)",
+      "Bash(javac *)",
+      "Bash(gradle *)",
+      "Bash(./gradlew *)",
+      "Bash(mvn *)",
+      "Bash(python3 *)",
+      "Bash(pip3 *)",
+      "Bash(pip *)",
+      "Bash(sqlite3 *)",
+      "Bash(npx vitest *)",
+      "Bash(npx vitest)",
+      "Bash(npx tsc *)",
+      "Bash(npx tsc)",
+      "Bash(npx eslint *)",
+      "Bash(npx eslint)",
+      "Bash(npx prettier *)",
+      "Bash(npx prettier)",
+      "Bash(ls *)",
+      "Bash(tree:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(less:*)",
+      "Bash(wc:*)",
+      "Bash(file:*)",
+      "Bash(stat:*)",
+      "Bash(du:*)",
+      "Bash(df:*)",
+      "Bash(pbcopy*)",
+      "Bash(pbpaste*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git mv:*)",
+      "Bash(git stash:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git tag:*)",
+      "Bash(git describe:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git cat-file:*)",
+      "Bash(git blame:*)",
+      "Bash(git shortlog:*)",
+      "Bash(git reflog:*)",
+      "Bash(git init:*)",
+      "Bash(git init)",
+      "WebSearch",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:docs.claude.com)",
+      "WebFetch(domain:code.claude.com)",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:*.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "mcp__pencil"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(~/Library/**)",
+      "Edit(~/Library/**)",
+      "Edit(//etc/**)",
+      "Bash(su:*)",
+      "Bash(sudo:*)",
+      "Bash(passwd:*)",
+      "Bash(history:*)",
+      "Bash(env:*)",
+      "Bash(printenv:*)",
+      "Bash(rsync:*)",
+      "Bash(scp:*)",
+      "Bash(sftp:*)",
+      "Bash(socat:*)",
+      "Bash(ssh:*)",
+      "Bash(nc:*)",
+      "Bash(ncat:*)",
+      "Bash(netcat:*)",
+      "Bash(nmap:*)",
+      "Bash(shutdown:*)",
+      "Bash(reboot:*)",
+      "Bash(halt:*)",
+      "Bash(poweroff:*)",
+      "Bash(crontab:*)",
+      "Bash(launchctl:*)",
+      "Bash(op:*)",
+      "Bash(vault:*)",
+      "Bash(security:*)",
+      "Bash(npm publish *)",
+      "Bash(npm publish)"
+    ],
+    "ask": [
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push *)",
+      "Bash(kill *)",
+      "Bash(killall *)",
+      "Bash(pkill *)",
+      "Bash(diskutil *)",
+      "Bash(defaults *)",
+      "Bash(aws *)",
+      "Bash(gcloud *)",
+      "Bash(az *)",
+      "Bash(docker system prune *)",
+      "Bash(docker volume rm *)",
+      "Bash(docker volume prune *)",
+      "Bash(kubectl delete *)",
+      "Bash(gpg --export-secret-keys*)",
+      "Bash(git rm *)",
+      "Bash(git config *)",
+      "WebFetch"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/block-denied-commands.sh",
+            "timeout": 5,
+            "statusMessage": "Security check..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/warn-dangerous.sh",
+            "timeout": 5,
+            "statusMessage": "Checking for dangerous commands..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/block-dev-servers.sh",
+            "timeout": 5,
+            "statusMessage": "Checking for dev-server launch..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/git-workflow.sh",
+            "timeout": 5,
+            "statusMessage": "Checking git workflow rules..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/check-package-safety.sh",
+            "timeout": 30,
+            "statusMessage": "Checking package safety via Socket.dev..."
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/warn-secrets.sh",
+            "timeout": 5,
+            "statusMessage": "Checking for secrets..."
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh",
+    "padding": 2
+  },
+  "enabledPlugins": {
+    "dev-assistant@lig-kit-plugins": true,
+    "github-initializer@lig-kit-plugins": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "figma@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "serena@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "deploy-on-aws@agent-plugins-for-aws": true,
+    "swift-lsp@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "lig-kit-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "liginc-dx/lig-kit-claude-plugin"
+      }
+    },
+    "agent-plugins-for-aws": {
+      "source": {
+        "source": "github",
+        "repo": "awslabs/agent-plugins"
+      }
+    }
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": true,
+    "network": {
+      "allowedDomains": [
+        "registry.npmjs.org",
+        "api.npmjs.org",
+        "crates.io",
+        "static.crates.io",
+        "index.crates.io",
+        "pypi.org",
+        "files.pythonhosted.org",
+        "proxy.golang.org",
+        "sum.golang.org",
+        "storage.googleapis.com",
+        "rubygems.org",
+        "repo1.maven.org",
+        "plugins.gradle.org",
+        "cocoapods.org",
+        "cdn.cocoapods.org",
+        "pub.dev",
+        "github.com",
+        "api.github.com"
+      ]
+    },
+    "filesystem": {
+      "allowWrite": [
+        "~/Documents/GitHub",
+        "~/Documents/claude-shared",
+        "~/Developers",
+        "~/.gitignore_global",
+        "~/.gitconfig",
+        "~/.claude/skills",
+        "~/.cargo",
+        "~/.rustup",
+        "~/.npm",
+        "~/.cache",
+        "~/.local/share/pip",
+        "~/.pyenv",
+        "~/.nvm",
+        "~/.bun",
+        "~/.gradle",
+        "~/.m2"
+      ],
+      "allowRead": [
+        "/etc/gitconfig",
+        "/etc/ssl"
+      ]
+    },
+    "excludedCommands": [
+      "docker",
+      "kubectl",
+      "git",
+      "cargo",
+      "rustup",
+      "gh",
+      "pbcopy",
+      "pbpaste",
+      "colima",
+      "go"
+    ]
+  },
+  "effortLevel": "xhigh",
+  "skipAutoPermissionPrompt": true
+}

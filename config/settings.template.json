@@ -27,9 +27,7 @@
       "Bash(npm run lint)",
       "Bash(npm run format *)",
       "Bash(npm run format)",
-      "Bash(npm run start)",
       "Bash(pnpm build)",
-      "Bash(pnpm start)",
       "Bash(pnpm run *)",
       "Bash(pnpm test *)",
       "Bash(pnpm test)",
@@ -276,7 +274,9 @@
         "cdn.cocoapods.org",
         "pub.dev",
         "github.com",
-        "api.github.com"
+        "api.github.com",
+        "socket.dev",
+        "api.socket.dev"
       ]
     },
     "filesystem": {

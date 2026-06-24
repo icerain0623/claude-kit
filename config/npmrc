@@ -4,6 +4,9 @@
 ignore-scripts=true
 
 # Don't install a release until it's had time to be vetted (supply-chain).
+# Unit is DAYS, and this key is npm v11+ only. pnpm does NOT read it — pnpm uses
+# `minimumReleaseAge` (in MINUTES) set per-project in pnpm-workspace.yaml.
+# ignore-scripts above DOES apply to pnpm; only this release delay is npm-only.
 min-release-age=7
 
 # When a trusted package genuinely needs its build step, run it explicitly:

@@ -57,7 +57,9 @@ for pkg in $pkgs; do
   pkg_key=$(echo "$pkg" | sed 's/@[^/]*$//')
 
   # --- Layer 1: Cache (24h TTL) ---
-  cache_file="$cache_dir/$pkg_key"
+  # Flatten scoped names (@scope/pkg) so the cache file is a single flat path —
+  # otherwise the write fails because the @scope subdir does not exist.
+  cache_file="$cache_dir/$(echo "$pkg_key" | tr '/@' '__')"
   if [ -f "$cache_file" ]; then
     age=$(( $(date +%s) - $(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null) ))
     if [ "$age" -lt 86400 ]; then
@@ -70,7 +72,9 @@ for pkg in $pkgs; do
 
   # --- Layer 3: npm view (free, no quota) ---
   info=$(npm view "$pkg" --json 2>/dev/null)
-  if [ -z "$info" ]; then
+  # `npm view <missing> --json` returns an {"error":...} object on stdout (not an
+  # empty string), so the bare -z test never fired — check both.
+  if [ -z "$info" ] || echo "$info" | jq -e '.error' >/dev/null 2>&1; then
     warn "Package '$pkg' not found on npm registry"
   fi
 
@@ -83,7 +87,7 @@ for pkg in $pkgs; do
 
   # 3b. Weekly downloads
   dl_url="https://api.npmjs.org/downloads/point/last-week/$pkg_key"
-  downloads=$(curl -sf "$dl_url" | jq -r '.downloads // 0' 2>/dev/null)
+  downloads=$(curl -sf --connect-timeout 3 --max-time 8 "$dl_url" | jq -r '.downloads // 0' 2>/dev/null)
   downloads=${downloads:-0}
 
   # 3c. Last modified date

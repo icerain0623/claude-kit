@@ -11,7 +11,7 @@
 
 ## Packages
 - Prefer pnpm for Node (content-addressable store saves disk). Match an existing repo's lockfile; don't switch it.
-- pnpm: set `trustPolicy: no-downgrade`. Global `~/.npmrc` already enforces `ignore-scripts` and `min-release-age`.
+- Supply-chain delay: `~/.npmrc` enforces `ignore-scripts` (applies to both npm and pnpm) and `min-release-age=7` (**npm v11+ only**, in days). pnpm ignores `min-release-age` — to get the same vetting delay under pnpm, set `minimumReleaseAge` (minutes) in the project's `pnpm-workspace.yaml` (pnpm 11+ defaults it to 1 day). Also set pnpm `trustPolicy: no-downgrade`.
 
 ## Toolchains
 - Versions via mise: respect a project's `.mise.toml` / `.tool-versions`; run through mise shims or `mise exec --`. Don't contradict the project's pin.

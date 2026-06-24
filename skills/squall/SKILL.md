@@ -1,6 +1,6 @@
 ---
 name: squall
-description: Initialize a project's Claude Code setup once — detect language, package manager and check commands, record conventions in .claude/CLAUDE.md, enable opt-in tools (e.g. release-note) on confirmation, and write the static router config .claude/project.md that monsoon reads. Use when starting work in a repo that has no .claude/project.md. For a still-empty project, plan it with petrichor first.
+description: One-time setup of a repo's Claude Code config — detects the stack (language, package manager, check commands), records conventions in .claude/CLAUDE.md, enables opt-in tools like release-note on confirmation, and writes the static config .claude/project.md that monsoon routes from. Invoke by name as /squall, or it triggers when the user asks to initialize, onboard, bootstrap, or "set up Claude Code" for the current repo, or when work begins in a repo that has no .claude/project.md. Idempotent — safe to re-run. Disambiguation: use this for a repo that already has code; for a still-empty greenfield project, plan it with petrichor first. Not for scaffolding the application's own code.
 ---
 
 # squall

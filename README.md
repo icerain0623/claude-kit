@@ -11,6 +11,8 @@ My portable [Claude Code](https://claude.com/claude-code) setup — config **and
 ```
 claude-kit/
 ├── install.sh                 # symlinks everything below into ~/.claude
+├── test-hooks.sh              # behavioral regression suite for config/hooks/*.sh
+├── lint.sh                    # shellcheck over the hooks (needs `brew install shellcheck`)
 ├── config/
 │   ├── CLAUDE.md              # global instructions       → ~/.claude/CLAUDE.md
 │   ├── settings.template.json # permissions/sandbox/hooks → ~/.claude/settings.json (PAT is a placeholder)
@@ -71,7 +73,7 @@ Lifecycle: `petrichor` → `squall` → `monsoon`, then `monsoon` dispatches the
 
    Read-only steps run automatically; anything outward or irreversible is proposed first.
 
-Call a skill directly for a single step:
+Each authored skill works two ways — type `/<name>` to run it directly, or just describe the task and it triggers from context (descriptions are tuned to fire on the right intent and stay quiet otherwise). Call one directly for a single step:
 
 | skill | what it does |
 | --- | --- |

@@ -7,8 +7,10 @@ This repo **is** the source of the global Claude Code config. `install.sh` symli
 - Edit the files in `config/` and `skills/` here — never edit `~/.claude/*` directly (they're symlinks back to this repo).
 - After editing `config/settings.template.json`, validate it:
   `python3 -c "import json; json.load(open('config/settings.template.json'))"`. It maps to `~/.claude/settings.json`.
-- Hooks in `config/hooks/*.sh` are bash + depend on `jq`. Test one by piping a sample event:
-  `echo '{"tool_input":{"command":"pnpm dev"}}' | bash config/hooks/block-dev-servers.sh`.
+- Hooks in `config/hooks/*.sh` are bash + depend on `jq`. After changing any hook, run the regression
+  suite `bash test-hooks.sh` (behavioral — catches logic bugs like a dead `grep -q | grep` pipe that
+  shellcheck can't) and `bash lint.sh` (shellcheck; needs `brew install shellcheck`). Add a case to
+  `test-hooks.sh` for any new check.
 - Changes take effect only after a **Claude Code restart** (the symlinks are read at launch).
 
 ## Layer model (where a rule belongs)

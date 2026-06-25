@@ -37,6 +37,10 @@ done
 
 echo "Wiring global gitignore ..."
 link "$REPO/config/gitignore_global" "$HOME/.gitignore_global"
+prev_excludes="$(git config --global --get core.excludesfile 2>/dev/null || true)"
+if [ -n "$prev_excludes" ] && [ "$prev_excludes" != "$HOME/.gitignore_global" ]; then
+  echo "  NOTE: overriding existing core.excludesfile (was: $prev_excludes)"
+fi
 git config --global core.excludesfile "$HOME/.gitignore_global"
 
 echo "Wiring global npm config ..."

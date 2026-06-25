@@ -2,6 +2,7 @@
 
 # Line 1: model  ctx:▌▌▌····  34%   branch
 # Line 2: proj:~/path/to/project  cwd:~/path/to/current
+# Line 3: 5h:▌▌▌····· 12.50% | 7d:▌▌▌····· 80.10%   (rate limits, when present)
 
 input=$(cat)
 
@@ -106,6 +107,12 @@ if [ -n "$seven_pct" ]; then
   rl_parts+=("$seven_str")
 fi
 if [ ${#rl_parts[@]} -gt 0 ]; then
-  printf '\n%s' "$(IFS=' | '; echo "${rl_parts[*]}")"
+  # Join with a literal ' | ' (matching lines above). ${arr[*]} with IFS only
+  # uses IFS's FIRST char, so it cannot produce a multi-char separator.
+  rl_line="${rl_parts[0]}"
+  for ((i = 1; i < ${#rl_parts[@]}; i++)); do
+    rl_line="${rl_line} | ${rl_parts[i]}"
+  done
+  printf '\n%s' "$rl_line"
 fi
 

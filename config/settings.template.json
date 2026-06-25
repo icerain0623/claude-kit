@@ -112,18 +112,7 @@
       "WebFetch(domain:docs.claude.com)",
       "WebFetch(domain:code.claude.com)",
       "WebFetch(domain:www.anthropic.com)",
-      "mcp__pencil",
-      "Edit(/Users/tsuchidasena/Documents/GitHub/**)",
-      "Write(/Users/tsuchidasena/Documents/GitHub/**)",
-      "Read(/Users/tsuchidasena/Documents/GitHub/**)",
-      "Edit(/Users/tsuchidasena/Developers/**)",
-      "Write(/Users/tsuchidasena/Developers/**)",
-      "Read(/Users/tsuchidasena/Developers/**)",
-      "Edit(/Users/tsuchidasena/Documents/claude-shared-folder/claude-shared/**)",
-      "Write(/Users/tsuchidasena/Documents/claude-shared-folder/claude-shared/**)",
-      "Read(/Users/tsuchidasena/Documents/claude-shared-folder/claude-shared/**)",
-      "Bash(npm run dev)",
-      "Bash(npm run start)"
+      "mcp__pencil"
     ],
     "deny": [
       "Read(./.env)",
@@ -329,8 +318,7 @@
         "~/.nvm",
         "~/.bun",
         "~/.gradle",
-        "~/.m2",
-        "~/Documents/claude-shared-folder/claude-shared"
+        "~/.m2"
       ],
       "allowRead": [
         "/etc/gitconfig",

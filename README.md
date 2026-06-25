@@ -3,12 +3,16 @@
 My portable [Claude Code](https://claude.com/claude-code) setup — config **and** authored skills in one repo, so a new machine is one `git clone` + `./install.sh` away.
 
 > **Private repo.** It mirrors `~/.claude`. No real secrets are committed (see [Secrets](#secrets)), but keep it private.
+>
+> **macOS-only.** Some paths are macOS/author-specific — `SSL_CERT_FILE`/`CARGO_HTTP_CAINFO` point at `/etc/ssl/cert.pem`, `EDITOR` is WebStorm, and the sandbox write-roots are `~/Documents/GitHub` and `~/Developers`. On Linux these would need adjusting before `./install.sh`.
 
 ## Layout
 
 ```
 claude-kit/
 ├── install.sh                 # symlinks everything below into ~/.claude
+├── test-hooks.sh              # behavioral regression suite for config/hooks/*.sh
+├── lint.sh                    # shellcheck over the hooks (needs `brew install shellcheck`)
 ├── config/
 │   ├── CLAUDE.md              # global instructions       → ~/.claude/CLAUDE.md
 │   ├── settings.template.json # permissions/sandbox/hooks → ~/.claude/settings.json (PAT is a placeholder)
@@ -56,20 +60,20 @@ Restart Claude Code.
 
 Lifecycle: `petrichor` → `squall` → `monsoon`, then `monsoon` dispatches the rest.
 
-0. **New / empty project — `petrichor`.** Interview to a full spec, build the initial scaffold, then run `squall`. (Skip for a repo that already has code.)
+0. **New / empty project — `petrichor`.** Interview to a full spec (`docs/petrichor-plan/00-overview.md`). The agent then implements/scaffolds from that spec via its normal coding loop — there is no dedicated implementation skill — after which you run `squall`. (Skip for a repo that already has code.)
 
 1. **Once per repo — `squall`.** Detects the stack and check commands, writes `.claude/project.md` (static config that `monsoon` reads) and `.claude/CLAUDE.md` (project conventions), and enables opt-ins like release notes on confirmation.
 
 2. **Every time after — `monsoon`.** Reads `.claude/project.md` + live git state and does the next sensible thing, delegating to the right skill:
    - uncommitted changes → `check` (lint/typecheck), then offers to commit
+   - version bump + release notes enabled → `release-note` (offered before the PR, so the changelog lands in the same push)
    - feature branch with checks passing → offers to push / open a PR
-   - version bump + release notes enabled → `release-note`
    - merged branches piling up → `clean-branches`
    - on request → `session-learn`
 
    Read-only steps run automatically; anything outward or irreversible is proposed first.
 
-Call a skill directly for a single step:
+Each authored skill works two ways — type `/<name>` to run it directly, or just describe the task and it triggers from context (descriptions are tuned to fire on the right intent and stay quiet otherwise). Call one directly for a single step:
 
 | skill | what it does |
 | --- | --- |

@@ -1,6 +1,6 @@
 ---
 name: monsoon
-description: The recurring workflow entry point. Reads the project's static config (.claude/project.md) plus live git/repo state, decides the next sensible action, and delegates to the right skill (check, release-note, clean-branches, session-learn); commits via the built-in harness behavior, not a skill. Proposes irreversible steps before acting; runs read-only steps automatically. Use to advance the workflow in a repo set up by squall.
+description: The recurring workflow router for a repo already set up by squall. Reads .claude/project.md plus live git state (uncommitted changes, branch, tags, merged branches) and proposes the next sensible step, delegating to the right skill (check, release-note, clean-branches, session-learn) and committing via built-in harness behavior. Read-only steps run automatically; irreversible steps (commit, push, PR, deletion, tagging) are proposed first. Invoke by name as /monsoon, or it triggers when the user asks what to do next, to advance/continue/wrap up the workflow, or "run the usual flow" without naming a specific action. If the user names a specific action (run checks, write release notes, clean branches, set up the repo), defer to that dedicated skill instead of routing through monsoon.
 ---
 
 # monsoon
@@ -15,8 +15,8 @@ The recurring router. Not a fixed pipeline — it inspects state and picks the n
 ## Decision (first match wins; propose, don't force)
 1. No `.claude/project.md`: empty repo (no code) → suggest `petrichor` (plan it); has code → suggest `squall` (init).
 2. Uncommitted changes → run `check` (default tier). If it passes, offer to commit using the built-in commit behavior (follow the CLAUDE.md Git rules); if it fails, summarize the failures and stop.
-3. On a feature branch, everything committed, checks pass → offer to push / open a PR.
-4. A version bump is present and `opt_in.release_note: on` → invoke `release-note`.
+3. A version bump is present (vs the last tag/release) and `opt_in.release_note: on` → invoke `release-note`. Evaluate this **before** the push/PR branch below, otherwise on a feature branch step 4 always wins (a clean tree counts as "everything committed") and the changelog is never offered. The goal is for the release note to land in the same push.
+4. On a feature branch, everything committed, checks pass → offer to push / open a PR.
 5. Branches merged into the default branch are piling up → suggest `clean-branches`.
 6. On explicit request, or when nothing else is pending → offer `session-learn`.
 
